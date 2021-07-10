@@ -5,7 +5,7 @@
     <string name="img">Image Preview</string>
     <string name="choose_img">Choose an Image:</string>
     <string name="enter_cat">Enter Name:</string>
-    <string name="notify_1">• Notify me</string>
+    <string name="notify_1">Notify me</string>
     <string name="default_days">5</string>
     <string name="notify_2">days before expiry</string>
     <string name="add_btn">Add</string>

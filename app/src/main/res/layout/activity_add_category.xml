@@ -64,8 +64,13 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:layout_marginTop="10dp"
+            android:padding="5dp"
+            android:background="@drawable/text_box"
             android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:maxLines="1"
             android:id="@+id/name"/>
 
         <LinearLayout
@@ -86,10 +91,13 @@
             <EditText
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
+                android:padding="5dp"
+                android:background="@drawable/text_box"
                 android:text="@string/default_days"
                 android:textSize="20sp"
                 android:textColor="@color/white"
+                android:maxLength="3"
+                android:maxLines="1"
                 android:fontFamily="@font/lato"
                 android:inputType="numberSigned"
                 android:id="@+id/days"/>
