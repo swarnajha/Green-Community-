@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Forget-Me-Not</string>
+    <string name="prev">Go to Previous Image</string>
+    <string name="next">Go to Next Image</string>
+    <string name="img">Image Preview</string>
+    <string name="choose_img">Choose an Image:</string>
+    <string name="enter_cat">Enter Name:</string>
+    <string name="notify_1">• Notify me</string>
+    <string name="default_days">5</string>
+    <string name="notify_2">days before expiry</string>
+    <string name="add_btn">Add</string>
+    <string name="category_list_title">Your Categories</string>
+    <string name="add_category">Add Category</string>
+    <string name="add_item">Add Item</string>
+    <string name="item_list_title">Your Items</string>
+
+</resources>
