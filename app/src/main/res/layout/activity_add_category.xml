@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <include layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
+    <include layout="@layout/toolbar"/>
+    <include layout="@layout/divider"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,6 +13,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
             android:text="@string/choose_img"
             android:textSize="20sp"
             android:textColor="@color/white"
@@ -29,7 +31,7 @@
             android:id="@+id/carousel">
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
@@ -45,7 +47,7 @@
                 android:id="@+id/img"/>
             <ImageView
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
@@ -57,6 +59,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
             android:text="@string/enter_cat"
             android:textSize="20sp"
             android:textColor="@color/white"
@@ -65,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:padding="5dp"
+            android:padding="10dp"
             android:background="@drawable/text_box"
             android:inputType="textPersonName"
             android:textColor="@color/white"
@@ -76,22 +81,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingLeft="0dp"
+            android:paddingStart="0dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/notify_1"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/lato" />
             <EditText
-                android:layout_width="25dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:background="@drawable/text_box"
                 android:text="@string/default_days"
                 android:textSize="20sp"
@@ -104,8 +112,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/notify_2"
                 android:textSize="20sp"
                 android:textColor="@color/white"
@@ -116,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/add_btn"
+            android:textSize="18sp"
             android:fontFamily="@font/lato"
             android:backgroundTint="@color/purple"
             android:id="@+id/add_cat"/>
