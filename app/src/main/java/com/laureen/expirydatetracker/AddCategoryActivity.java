@@ -81,6 +81,8 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: add to db
+                //DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+                //dbHelper.addCategory(pass in Category obj made using values passed);
                 //if successful
                 Toast.makeText(AddCategoryActivity.this, "Category Added!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(AddCategoryActivity.this, MainActivity.class);

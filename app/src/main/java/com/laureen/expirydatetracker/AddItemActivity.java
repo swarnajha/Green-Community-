@@ -43,5 +43,8 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
+        //DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+
+
     }
 }

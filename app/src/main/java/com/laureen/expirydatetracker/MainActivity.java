@@ -38,5 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+        //List<Category> categories = databaseHelper.getAllCategories();
     }
 }
