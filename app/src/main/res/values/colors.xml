@@ -9,6 +9,7 @@
     <!--App Colour List-->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey">#C4C4C4</color>
     <color name="dark_purple">#6D0069</color>
     <color name="purple">#5603AD</color>
     <color name="light_blue_500">#6280C9</color>
