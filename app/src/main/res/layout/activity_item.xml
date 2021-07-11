@@ -11,8 +11,9 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
+        android:background="@color/purple"
         android:padding="10dp"
-        android:id="@+id/category_list" />
+        android:id="@+id/item_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_item"
@@ -23,7 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add"
-        android:contentDescription="@string/add_category"
+        android:contentDescription="@string/add_item"
         android:layout_margin="16dp" />
 
 </RelativeLayout>

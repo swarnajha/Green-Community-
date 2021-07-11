@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     TextView title;
     ListView category_list;
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         category_list = findViewById(R.id.category_list);
 
         databaseHelper = new DatabaseHelper(MainActivity.this);
-        //List<Category> categories = databaseHelper.getAllCategories();
         categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
         category_list.setAdapter(categoryArrayAdapter);
 
@@ -56,8 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
         category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("CAtegory List", "onItemClick: item clicked - "+ l);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Category clicked_category = (Category) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+                intent.putExtra("id", String.valueOf(clicked_category.getId()));
+                intent.putExtra("name", String.valueOf(clicked_category.getName()));
+                Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
+                startActivity(intent);
             }
         });
     }
