@@ -5,15 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     TextView title;
+    ListView category_list;
     ImageView icon;
     FloatingActionButton fab;
+    DatabaseHelper databaseHelper;
+    ArrayAdapter<Category> categoryArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         title = findViewById(R.id.page_title);
         fab = findViewById(R.id.fab_cat);
         icon = findViewById(R.id.toolbar_icon);
+        category_list = findViewById(R.id.category_list);
 
         //Change the page title
         title.setText(R.string.category_list_title);
@@ -38,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        //DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
+        databaseHelper = new DatabaseHelper(MainActivity.this);
         //List<Category> categories = databaseHelper.getAllCategories();
+        categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
+        category_list.setAdapter(categoryArrayAdapter);
     }
 }
