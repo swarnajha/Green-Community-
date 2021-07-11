@@ -7,7 +7,7 @@
     <include layout="@layout/divider"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
         <TextView
@@ -71,11 +71,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:padding="10dp"
-            android:background="@drawable/text_box"
             android:inputType="textPersonName"
             android:textColor="@color/white"
+            android:background="@drawable/text_box"
             android:textSize="20sp"
-            android:maxLines="1"
             android:id="@+id/name"/>
 
         <LinearLayout
@@ -84,8 +83,8 @@
             android:padding="10dp"
             android:paddingLeft="0dp"
             android:paddingStart="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -126,6 +125,7 @@
             android:text="@string/add_btn"
             android:textSize="18sp"
             android:fontFamily="@font/lato"
+            android:padding="10dp"
             android:backgroundTint="@color/purple"
             android:id="@+id/add_cat"/>
     </LinearLayout>

@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:background="@color/dark_purple"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/text_box"
+        android:padding="10dp"
         android:id="@+id/category_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -4,13 +4,13 @@ public class Category {
     private int id;
     private String name;
     private int days;
-    private String imageName;
+    private int imageNo;
 
-    public Category(int id, String name, int days, String imageName) {
+    public Category(int id, String name, int days, int imageNo) {
         this.id = id;
         this.name = name;
         this.days = days;
-        this.imageName = imageName;
+        this.imageNo = imageNo;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class Category {
                 "id: " + id +
                 ", name: " + name +
                 ", days: " + days +
-                ", imageName: " + imageName +
+                ", imageName: " + imageNo +
                 '}';
     }
 
@@ -47,11 +47,11 @@ public class Category {
         this.days = days;
     }
 
-    public String getImageName() {
-        return imageName;
+    public int getImageNo() {
+        return imageNo;
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public void setImageNo(int imageNo) {
+        this.imageNo = imageNo;
     }
 }

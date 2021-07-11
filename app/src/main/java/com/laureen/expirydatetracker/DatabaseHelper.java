@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -21,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ITEM_COLUMN_3 = "Date";
     public static final String ITEM_COLUMN_4 = "CategoryID";
     public static final String CAT_COLUMN_3 = "Days";
-    public static final String CAT_COLUMN_4 = "ImageName";
+    public static final String CAT_COLUMN_4 = "ImageNo";
 
 
     public DatabaseHelper(@Nullable Context context) {
@@ -31,34 +32,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //called the 1st time db is accessed
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_ITEM_TABLE = "CREATE TABLE " + CAT_TABLE_NAME + "( " +
+        String CREATE_ITEM_TABLE = "CREATE TABLE " + ITEM_TABLE_NAME + "( " +
                 COLUMN_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_2 + " TEXT NOT NULL, " +
                 ITEM_COLUMN_3 + " TEXT NOT NULL, " +
                 ITEM_COLUMN_4 + " REFERENCES " + CAT_TABLE_NAME + "(" + COLUMN_1 + ") ON DELETE CASCADE);";
-        String CREATE_CAT_TABLE = "CREATE TABLE " + ITEM_TABLE_NAME + "( " +
+        String CREATE_CAT_TABLE = "CREATE TABLE " + CAT_TABLE_NAME + "( " +
                 COLUMN_1 + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_2 + " TEXT NOT NULL, " +
                 CAT_COLUMN_3 + " INTEGER NOT NULL, " +
-                CAT_COLUMN_4 + " TEXT NOT NULL);";
+                CAT_COLUMN_4 + " INTEGER NOT NULL);";
         db.execSQL(CREATE_CAT_TABLE);
         db.execSQL(CREATE_ITEM_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + CAT_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ITEM_TABLE_NAME);
+        db.execSQL("DROP TABLE " + CAT_TABLE_NAME);
+        db.execSQL("DROP TABLE " + ITEM_TABLE_NAME);
     }
 
     //View>Tool Windows>Dev File Explorer>com.blah.>get the db
     public Boolean addCategory(Category category) {
-        //to add a category to the db
+        //to add_btn a category to the db
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_2, category.getName());
         cv.put(CAT_COLUMN_3, category.getDays());
-        cv.put(CAT_COLUMN_4, category.getImageName());
+        cv.put(CAT_COLUMN_4, category.getImageNo());
 
         long result = db.insert(CAT_TABLE_NAME, null, cv);
         db.close();
@@ -85,9 +86,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 int days = cursor.getInt(2);
-                String imageName = cursor.getString(3);
+                int imageNo = cursor.getInt(3);
 
-                Category category = new Category(id, name, days, imageName);
+                Category category = new Category(id, name, days, imageNo);
                 returnList.add(category);
             } while(cursor.moveToNext());
         }
@@ -98,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Boolean addItem(Item item) {
-        //to add an item to the db
+        //to add_btn an item to the db
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_2, item.getName());

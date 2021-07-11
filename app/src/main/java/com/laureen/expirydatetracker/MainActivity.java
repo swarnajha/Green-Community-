@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,10 +34,15 @@ public class MainActivity extends AppCompatActivity {
         icon = findViewById(R.id.toolbar_icon);
         category_list = findViewById(R.id.category_list);
 
+        databaseHelper = new DatabaseHelper(MainActivity.this);
+        //List<Category> categories = databaseHelper.getAllCategories();
+        categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
+        category_list.setAdapter(categoryArrayAdapter);
+
         //Change the page title
         title.setText(R.string.category_list_title);
 
-        //Change the top left icon to a back button
+        //Change the top left icon to the logo
         icon.setImageResource(R.drawable.toolbar_logo);
         icon.setContentDescription("Logo");
 
@@ -46,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        databaseHelper = new DatabaseHelper(MainActivity.this);
-        //List<Category> categories = databaseHelper.getAllCategories();
-        categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
-        category_list.setAdapter(categoryArrayAdapter);
+
+        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("CAtegory List", "onItemClick: item clicked - "+ l);
+            }
+        });
     }
 }

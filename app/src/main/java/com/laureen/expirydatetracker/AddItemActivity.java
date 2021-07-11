@@ -24,7 +24,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         title = findViewById(R.id.page_title);
         icon = findViewById(R.id.toolbar_icon);
-        add = findViewById(R.id.add_cat);
+        //add_btn = findViewById(R.id.add_cat);
         date1 = findViewById(R.id.expiry_date1);
         add_date = findViewById(R.id.add_date);
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,12 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddCategoryActivity extends AppCompatActivity {
+    private static final String TAG = "AddCategoryActivity";
     int imageCounter = 1, imageNum = 6;
-
-    Button add;
+    Button add_btn;
     TextView title;
     EditText name, days;
     ImageView icon, prev, next, img;
+    DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +30,11 @@ public class AddCategoryActivity extends AppCompatActivity {
         prev = findViewById(R.id.prev);
         img = findViewById(R.id.img);
         next = findViewById(R.id.next);
-        add = findViewById(R.id.add_cat);
+        add_btn = findViewById(R.id.add_cat);
         name = findViewById(R.id.name);
         days = findViewById(R.id.days);
+
+        databaseHelper = new DatabaseHelper(AddCategoryActivity.this);
 
         //Change the page title
         title.setText(R.string.add_category);
@@ -39,6 +43,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         icon.setImageResource(R.drawable.left_arrow);
         icon.setContentDescription("Go Back");
 
+        //if back icon clicked, go to category list activity
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,9 +57,8 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 imageCounter--;
-                System.out.println("Prev " + imageCounter);
                 if(imageCounter != 0)
-                    setImage();
+                    setImage(imageCounter);
                 else
                     imageCounter = 1;
 
@@ -65,42 +69,64 @@ public class AddCategoryActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageCounter = (imageCounter + 1) % imageNum;
-                System.out.println("Next " + imageCounter);
+                imageCounter++;
                 if(imageCounter <= imageNum)
-                    setImage();
+                    setImage(imageCounter);
                 else
                     imageCounter = imageNum;
             }
         });
 
         //add the category to db
-
-        /*
-        add.setOnClickListener(new View.OnClickListener() {
+        add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: add to db
-                //DatabaseHelper databaseHelper = new DatabaseHelper(MainActivity.this);
-                //dbHelper.addCategory(pass in Category obj made using values passed);
-                //if successful
-                Toast.makeText(AddCategoryActivity.this, "Category Added!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AddCategoryActivity.this, MainActivity.class);
-                startActivity(intent);
+                String cat_name = "";
+                int notify_days;
+                try {
+                    cat_name = name.getText().toString();
+                    notify_days = Integer.parseInt(days.getText().toString());
+                } catch (Exception e) {
+                    Toast.makeText(AddCategoryActivity.this, "Enter Valid Input!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //validate input
+                if(cat_name.equals("")) {
+                    Toast.makeText(AddCategoryActivity.this, "Name is empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if(notify_days < 1 || notify_days > 10) {
+                    Toast.makeText(AddCategoryActivity.this, "Days should be between 1 and 10!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //add to the db
+                Category category = new Category(-1, cat_name, notify_days, imageCounter);
+                boolean result = databaseHelper.addCategory(category);
+                if(result) {
+                    //if successful
+                    Toast.makeText(AddCategoryActivity.this, "Category Added!" + category.toString(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AddCategoryActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(AddCategoryActivity.this, "An Error Occurred!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        */
+
+
 
     }
-    public void setImage() {
-        switch(imageCounter) {
+    public void setImage(int counter) {
+        switch(counter) {
             case 1: img.setImageResource(R.drawable.pink_image_1); break;
             case 2: img.setImageResource(R.drawable.pink_image_2); break;
             case 3: img.setImageResource(R.drawable.pink_image_3); break;
             case 4: img.setImageResource(R.drawable.blue_image_1); break;
             case 5: img.setImageResource(R.drawable.blue_image_2); break;
             case 6: img.setImageResource(R.drawable.blue_image_3); break;
-            default: System.out.println("An Error Occurred!");
+            default:
+                Log.d(TAG, "setImage: invalid counter - " + counter);
         }
     }
 }
