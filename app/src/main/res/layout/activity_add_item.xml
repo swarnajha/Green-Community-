@@ -32,7 +32,7 @@
             android:textSize="20sp"
             android:maxLines="1"
             android:fontFamily="@font/lato"
-            android:id="@+id/name"/>
+            android:id="@+id/item_name"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,44 +44,45 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             android:fontFamily="@font/lato"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:background="@drawable/text_box">
-            <EditText
-                android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/date_box_layout">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:hint="@string/date_hint"
-                android:textColorHint="@color/grey"
-
-                android:inputType="date"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:maxLines="1"
-                android:maxLength="10"
-                android:fontFamily="@font/lato"
-                android:layout_weight="0.8"
-                android:id="@+id/expiry_date1" />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.1"
-                android:src="@drawable/calendar_icon"
-                android:id="@+id/pick_date"
-                android:contentDescription="@string/pick_date_btn" />
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.05"
-                android:src="@drawable/ic_add_blue"
-                android:id="@+id/add_date"
-                android:contentDescription="@string/add_date_btn" />
+                android:background="@drawable/text_box"
+                android:padding="5dp">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
+                    android:padding="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/lato"
+                    android:hint="@string/date_hint"
+                    android:textColorHint="@color/grey"
+                    android:focusable="false"
+                    android:background="@color/black"
+                    android:onClick="setDate"
+                    android:id="@+id/expiry_date"/>
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/ic_add_blue"
+                    android:onClick="addDateBox"
+                    android:id="@+id/add_date_box"/>
+            </LinearLayout>
         </LinearLayout>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

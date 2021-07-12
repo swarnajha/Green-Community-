@@ -47,7 +47,8 @@ public class ItemActivity extends AppCompatActivity {
 
         //Change the page title
         title = findViewById(R.id.page_title);
-        title.setText(getResources().getString(R.string.item_list_title) + category_name);  //returns a number weirdly if you use without the whole thing
+        title.setText(getResources().getString(R.string.item_list_title) + " " + category_name);
+        //returns a number if you use without the whole thing
         //Log.d("Item List", "onCreate: title - " + getResources().getString(R.string.item_list_title) + ", " + category_name);
 
         //Change the top left icon to a back button
