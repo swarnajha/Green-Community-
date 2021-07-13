@@ -37,8 +37,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddItemActivity extends AppCompatActivity {
-    private NotificationManagerCompat managerCompat;
-
     public static final int YEAR_MIN = 2000;
     public static final int YEAR_MAX = 2050;
     private static final String TAG = "AddItemActivity";
@@ -63,8 +61,6 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-
-        managerCompat = NotificationManagerCompat.from(this);
 
         bundle = getIntent().getExtras();    //get category info to give back to item list
         category_id = Integer.parseInt((String) bundle.get("id"));    //get category id
@@ -126,7 +122,7 @@ public class AddItemActivity extends AppCompatActivity {
                 for(int i = 0; i < noOfDateBoxes; ++i) {
                     if (databaseHelper.addItem(items[i])) {
                         result++;
-                        notifyMe(items[i].getName());
+                        setAlarm(items[i]);
                         //scheduleNotification(getNotification( "5 second delay" ) , 5000 ) ;
                     }
                     else
@@ -143,20 +139,6 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-    public void notifyMe(String name) {
-        Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_ID)
-                .setSmallIcon(R.drawable.toolbar_logo)
-                .setContentTitle("Reminder: Expiry Date Tracker")
-                .setContentText(name + " is expiring!")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                .build();
-        managerCompat.notify(1, notification);
-    }
-
 
     public void setDate(View view) {
         //date picker
@@ -232,21 +214,22 @@ public class AddItemActivity extends AppCompatActivity {
         container.addView(ll);
     }
 
-//    private void setAlarm(Item item) {
-//        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
-//        intent.putExtra("name", item.getName());
-//        //intent.putExtra("date", item.getDate());
-//        //intent.putExtra("id", item.getId());
-//
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-//
-//        Calendar calendar1Notify = Calendar.getInstance();
-//
-//        calendar1Notify.setTimeInMillis(System.currentTimeMillis() + 10000);
-//        //calendar1Notify.add(Calendar.MINUTE, 1);
-//
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar1Notify.getTimeInMillis(), pendingIntent);
+    private void setAlarm(Item item) {
+        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+        intent.putExtra("name", item.getName());
+        //intent.putExtra("date", item.getDate());
+        //intent.putExtra("id", item.getId());
+        //TODO: Make notifications update, if many present
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar1Notify = Calendar.getInstance();
+
+        //TODO: Notify at the right time, not 10s after. Also, check if it has already expired
+        calendar1Notify.setTimeInMillis(System.currentTimeMillis() + 10000);
+        calendar1Notify.add(Calendar.DAY_OF_MONTH, 1);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar1Notify.getTimeInMillis(), pendingIntent);
 
 //        String dateTime = item.getDate() + " " + "10:00";
 //        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
@@ -267,7 +250,7 @@ public class AddItemActivity extends AppCompatActivity {
 //        } catch (NullPointerException e) {
 //            e.printStackTrace();
 //        }
-//    }
+    }
 //    private void scheduleNotification (Notification notification , int delay) {
 //        Intent notificationIntent = new Intent( this, MyReceiver.class ) ;
 //        notificationIntent.putExtra(MyReceiver.NOTIFICATION_ID , 1 ) ;

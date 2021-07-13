@@ -13,12 +13,26 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class MyReceiver extends BroadcastReceiver {
-
+    private NotificationManagerCompat managerCompat;
     public static final String CHANNEL_ID = "1000";
     public static String NOTIFICATION_ID = "notification-id" ;
     public static String NOTIFICATION = "notification" ;
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        managerCompat = NotificationManagerCompat.from(context);
+
+        Bundle bundle = intent.getExtras();
+        String name = (String) bundle.get("name");
+
+        Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ID)
+                .setSmallIcon(R.drawable.toolbar_logo)
+                .setContentTitle("Reminder: Expiry Date Tracker")
+                .setContentText(name + " is expiring!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .build();
+        managerCompat.notify(1, notification);
 //
 //        Intent i = new Intent(context, MainActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -44,17 +58,22 @@ public class MyReceiver extends BroadcastReceiver {
 //        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 //        int notificationId = 123;
 //        notificationManagerCompat.notify(notificationId, builder.build());
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context. NOTIFICATION_SERVICE ) ;
-        Notification notification = intent.getParcelableExtra( NOTIFICATION ) ;
-        if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
-            int importance = NotificationManager. IMPORTANCE_HIGH ;
-            NotificationChannel notificationChannel = new NotificationChannel( CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
-            assert notificationManager != null;
-            notificationManager.createNotificationChannel(notificationChannel) ;
-        }
-        int id = intent.getIntExtra( NOTIFICATION_ID , 0 ) ;
-        assert notificationManager != null;
-        notificationManager.notify(id , notification) ;
+
+
+//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context. NOTIFICATION_SERVICE ) ;
+//        Notification notification = intent.getParcelableExtra( NOTIFICATION ) ;
+//        if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
+//            int importance = NotificationManager. IMPORTANCE_HIGH ;
+//            NotificationChannel notificationChannel = new NotificationChannel( CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
+//            assert notificationManager != null;
+//            notificationManager.createNotificationChannel(notificationChannel) ;
+//        }
+//        int id = intent.getIntExtra( NOTIFICATION_ID , 0 ) ;
+//        assert notificationManager != null;
+//        notificationManager.notify(id , notification) ;
+    }
+    public void notifyMe(String name) {
+
     }
 
 }
