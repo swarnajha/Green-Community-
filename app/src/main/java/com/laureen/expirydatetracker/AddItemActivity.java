@@ -3,13 +3,19 @@ package com.laureen.expirydatetracker;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.InputType;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,16 +23,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddItemActivity extends AppCompatActivity {
+    private NotificationManagerCompat managerCompat;
+
     public static final int YEAR_MIN = 2000;
     public static final int YEAR_MAX = 2050;
     private static final String TAG = "AddItemActivity";
@@ -37,18 +49,22 @@ public class AddItemActivity extends AppCompatActivity {
 
     LinearLayout container;
     TextView title;
-    ImageView icon, date_picker, add_date_box;
+    ImageView icon, add_date_box;
     Button add_btn;
     EditText expiry_date, item_name;
 
     Bundle bundle;
     DatabaseHelper databaseHelper;
     DatePickerDialog datePickerDialog;
+    AlarmManager alarmManager;
+
     int year, month, day;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        managerCompat = NotificationManagerCompat.from(this);
 
         bundle = getIntent().getExtras();    //get category info to give back to item list
         category_id = Integer.parseInt((String) bundle.get("id"));    //get category id
@@ -108,8 +124,11 @@ public class AddItemActivity extends AppCompatActivity {
                 //add item(s) to db
                 int result = 0;
                 for(int i = 0; i < noOfDateBoxes; ++i) {
-                    if (databaseHelper.addItem(items[i]))
+                    if (databaseHelper.addItem(items[i])) {
                         result++;
+                        notifyMe(items[i].getName());
+                        //scheduleNotification(getNotification( "5 second delay" ) , 5000 ) ;
+                    }
                     else
                         result = noOfDateBoxes * -1;
                 }
@@ -118,8 +137,24 @@ public class AddItemActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(AddItemActivity.this, "An error occurred.", Toast.LENGTH_SHORT).show();
                 }
+                Intent intent = new Intent(AddItemActivity.this, ItemActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
+    }
+
+
+
+    public void notifyMe(String name) {
+        Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_ID)
+                .setSmallIcon(R.drawable.toolbar_logo)
+                .setContentTitle("Reminder: Expiry Date Tracker")
+                .setContentText(name + " is expiring!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .build();
+        managerCompat.notify(1, notification);
     }
 
 
@@ -196,4 +231,63 @@ public class AddItemActivity extends AppCompatActivity {
 
         container.addView(ll);
     }
+
+//    private void setAlarm(Item item) {
+//        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+//        intent.putExtra("name", item.getName());
+//        //intent.putExtra("date", item.getDate());
+//        //intent.putExtra("id", item.getId());
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//
+//        Calendar calendar1Notify = Calendar.getInstance();
+//
+//        calendar1Notify.setTimeInMillis(System.currentTimeMillis() + 10000);
+//        //calendar1Notify.add(Calendar.MINUTE, 1);
+//
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar1Notify.getTimeInMillis(), pendingIntent);
+
+//        String dateTime = item.getDate() + " " + "10:00";
+//        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm", Locale.getDefault());
+//        Calendar c = Calendar.getInstance();
+//        Date date1 = null;
+//        try {
+//            date1 = formatter.parse(dateTime);
+//            assert date1 != null;
+//            c.setTime(date1);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        c.add(Calendar.DATE, /*pass in the category's no of days */);
+//        c.add(Calendar.DATE, 1);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTime().getTime(), pendingIntent);
+//        try {
+//            alarmManager.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    private void scheduleNotification (Notification notification , int delay) {
+//        Intent notificationIntent = new Intent( this, MyReceiver.class ) ;
+//        notificationIntent.putExtra(MyReceiver.NOTIFICATION_ID , 1 ) ;
+//        notificationIntent.putExtra(MyReceiver.NOTIFICATION , notification) ;
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast ( this, 0 , notificationIntent , PendingIntent.FLAG_UPDATE_CURRENT ) ;
+//        long futureInMillis = SystemClock.elapsedRealtime () + delay ;
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE ) ;
+//        assert alarmManager != null;
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP , futureInMillis , pendingIntent) ;
+//    }
+//
+//    private Notification getNotification (String content) {
+//        String NOTIFICATION_CHANNEL_ID = "10001" ;
+//        String default_notification_channel_id = "default" ;
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, default_notification_channel_id );
+//        builder.setContentTitle( "Scheduled Notification" ) ;
+//        builder.setContentText(content) ;
+//        builder.setSmallIcon(R.drawable.toolbar_logo ) ;
+//        builder.setAutoCancel( true ) ;
+//        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+//        return builder.build() ;
+//    }
 }
