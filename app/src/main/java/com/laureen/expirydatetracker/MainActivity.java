@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,6 +25,16 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     DatabaseHelper databaseHelper;
     ArrayAdapter<Category> categoryArrayAdapter;
+
+    //array to hold image for display
+    Integer[] imageId = {
+            R.drawable.pink_image_1,
+            R.drawable.pink_image_2,
+            R.drawable.pink_image_3,
+            R.drawable.blue_image_1,
+            R.drawable.blue_image_2,
+            R.drawable.blue_image_3
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         category_list = findViewById(R.id.category_list);
 
         databaseHelper = new DatabaseHelper(MainActivity.this);
-        categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
-        category_list.setAdapter(categoryArrayAdapter);
+        //categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
+        //category_list.setAdapter(categoryArrayAdapter);
 
         //Change the page title
         title.setText(R.string.category_list_title);
@@ -47,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
         //Change the top left icon to the logo
         icon.setImageResource(R.drawable.toolbar_logo);
         icon.setContentDescription("Logo");
+
+        //populate the list
+        CategoryListAdapter adapter = new CategoryListAdapter(MainActivity.this, databaseHelper.getAllCategories(), imageId);
+        category_list.setAdapter(adapter);
+        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this, "You clicked position: " + position + ", id: " + id, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,19 +77,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Category clicked_category = (Category) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.this, ItemActivity.class);
-                intent.putExtra("id", String.valueOf(clicked_category.getId()));
-                intent.putExtra("name", String.valueOf(clicked_category.getName()));
-                intent.putExtra("days", String.valueOf(clicked_category.getDays()));
-                Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
-                startActivity(intent);
-            }
-        });
+//        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                Category clicked_category = (Category) parent.getItemAtPosition(position);
+//                Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+//                intent.putExtra("id", String.valueOf(clicked_category.getId()));
+//                intent.putExtra("name", String.valueOf(clicked_category.getName()));
+//                intent.putExtra("days", String.valueOf(clicked_category.getDays()));
+//                Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
+//                startActivity(intent);
+//            }
+//        });
     }
     private void createNotificationChannel() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

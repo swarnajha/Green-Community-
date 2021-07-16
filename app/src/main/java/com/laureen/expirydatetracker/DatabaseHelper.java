@@ -98,6 +98,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
+    public String[] getAllCategoryTitles(List<Category> categories) {
+        String[] category_titles = new String[categories.size()];
+        for(int i = 0; i < categories.size(); ++i) {
+            category_titles[i] = categories.get(i).getName();
+        }
+        return category_titles;
+    }
+
     public Boolean addItem(Item item) {
         //to add_btn an item to the db
         SQLiteDatabase db = this.getWritableDatabase();
