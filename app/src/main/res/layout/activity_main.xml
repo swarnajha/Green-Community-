@@ -11,7 +11,10 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true"
-        android:background="@color/purple"
+        android:divider = "#000"
+        android:dividerHeight = "2dp"
+        android:footerDividersEnabled = "false"
+        android:headerDividersEnabled = "false"
         android:padding="10dp"
         android:id="@+id/category_list" />
 

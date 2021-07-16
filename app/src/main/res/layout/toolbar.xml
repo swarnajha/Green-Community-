@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
     <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:src="@drawable/toolbar_logo"
         android:id="@+id/toolbar_icon"

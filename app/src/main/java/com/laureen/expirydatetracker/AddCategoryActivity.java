@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 public class AddCategoryActivity extends AppCompatActivity {
     private static final String TAG = "AddCategoryActivity";
+
+    public static final int NOTIFY_DAYS_MIN = 1;
+    public static final int NOTIFY_DAYS_MAX = 30;
     int imageCounter = 1, imageNum = 6;
     Button add_btn;
     TextView title;
@@ -95,8 +98,8 @@ public class AddCategoryActivity extends AppCompatActivity {
                 if(cat_name.equals("")) {
                     Toast.makeText(AddCategoryActivity.this, "Name is empty!", Toast.LENGTH_SHORT).show();
                     return;
-                } else if(notify_days < 1 || notify_days > 10) {
-                    Toast.makeText(AddCategoryActivity.this, "Days should be between 1 and 10!", Toast.LENGTH_SHORT).show();
+                } else if(notify_days < NOTIFY_DAYS_MIN || notify_days > NOTIFY_DAYS_MAX) {
+                    Toast.makeText(AddCategoryActivity.this, "Days should be between " + NOTIFY_DAYS_MIN +" and " + NOTIFY_DAYS_MAX +"!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

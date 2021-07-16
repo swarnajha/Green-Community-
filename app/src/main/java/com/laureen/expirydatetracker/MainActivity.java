@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ItemActivity.class);
                 intent.putExtra("id", String.valueOf(clicked_category.getId()));
                 intent.putExtra("name", String.valueOf(clicked_category.getName()));
+                intent.putExtra("days", String.valueOf(clicked_category.getDays()));
                 Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
                 startActivity(intent);
             }

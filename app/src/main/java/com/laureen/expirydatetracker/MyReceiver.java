@@ -13,26 +13,29 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class MyReceiver extends BroadcastReceiver {
-    private NotificationManagerCompat managerCompat;
     public static final String CHANNEL_ID = "1000";
-    public static String NOTIFICATION_ID = "notification-id" ;
-    public static String NOTIFICATION = "notification" ;
+    //public static String NOTIFICATION_ID = "notification-id";
+    //public static String NOTIFICATION = "notification";
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        managerCompat = NotificationManagerCompat.from(context);
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
 
         Bundle bundle = intent.getExtras();
         String name = (String) bundle.get("name");
+        String days = (String) bundle.get("days");
 
         Notification notification = new NotificationCompat.Builder(context, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.toolbar_logo)
                 .setContentTitle("Reminder: Expiry Date Tracker")
-                .setContentText(name + " is expiring!")
+                .setContentText(name + " is expiring in " + days + " days!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
                 .build();
         managerCompat.notify(1, notification);
+    }
+}
 //
 //        Intent i = new Intent(context, MainActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -71,9 +74,5 @@ public class MyReceiver extends BroadcastReceiver {
 //        int id = intent.getIntExtra( NOTIFICATION_ID , 0 ) ;
 //        assert notificationManager != null;
 //        notificationManager.notify(id , notification) ;
-    }
-    public void notifyMe(String name) {
-
-    }
-
-}
+//    }
+//}

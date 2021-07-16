@@ -24,7 +24,7 @@ public class ItemActivity extends AppCompatActivity {
     ArrayAdapter<Item> itemArrayAdapter;
 
     String category_name;
-    int category_id;
+    int category_id, category_days;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +35,7 @@ public class ItemActivity extends AppCompatActivity {
         Log.d("Item List", "bundle - "+ bundle.get("id") + bundle.get("name"));
         category_id = Integer.parseInt((String) bundle.get("id"));    //get category id
         category_name = (String) bundle.get("name"); //get category name
+        category_days = Integer.parseInt((String) bundle.get("days"));
 
         title = findViewById(R.id.page_title);
         fab = findViewById(R.id.fab_item);
