@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -27,8 +28,21 @@ public class CategoryListAdapter extends ArrayAdapter<Category> {
         View rowView = inflater.inflate(R.layout.category_row_item, null, true);
         TextView cat_title = (TextView) rowView.findViewById(R.id.cat_title);
         ImageView cat_img = (ImageView) rowView.findViewById(R.id.cat_img);
+        ImageView cat_del = (ImageView) rowView.findViewById(R.id.cat_del);
         cat_title.setText(categories.get(position).getName());
         cat_img.setImageResource(imageId[categories.get(position).getImageNo() - 1]);
+//        cat_del.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(context, "You clicked on delete at position: " + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "You clicked position: " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         return rowView;
     }
 }

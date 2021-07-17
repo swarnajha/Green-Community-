@@ -8,23 +8,24 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    List<Category> categories;
     TextView title;
-    ListView category_list;
     ImageView icon;
+    TableLayout category_list_table;
     FloatingActionButton fab;
     DatabaseHelper databaseHelper;
-    ArrayAdapter<Category> categoryArrayAdapter;
 
     //array to hold image for display
     Integer[] imageId = {
@@ -46,11 +47,8 @@ public class MainActivity extends AppCompatActivity {
         title = findViewById(R.id.page_title);
         fab = findViewById(R.id.fab_cat);
         icon = findViewById(R.id.toolbar_icon);
-        category_list = findViewById(R.id.category_list);
-
+        category_list_table = findViewById(R.id.cat_table);
         databaseHelper = new DatabaseHelper(MainActivity.this);
-        //categoryArrayAdapter = new ArrayAdapter<Category>(MainActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllCategories());
-        //category_list.setAdapter(categoryArrayAdapter);
 
         //Change the page title
         title.setText(R.string.category_list_title);
@@ -59,15 +57,24 @@ public class MainActivity extends AppCompatActivity {
         icon.setImageResource(R.drawable.toolbar_logo);
         icon.setContentDescription("Logo");
 
-        //populate the list
-        CategoryListAdapter adapter = new CategoryListAdapter(MainActivity.this, databaseHelper.getAllCategories(), imageId);
-        category_list.setAdapter(adapter);
-        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "You clicked position: " + position + ", id: " + id, Toast.LENGTH_SHORT).show();
-            }
-        });
+        //Populate the table by adding rows dynamically
+        LayoutInflater inflater = this.getLayoutInflater();
+        categories = databaseHelper.getAllCategories();
+
+        for(int i = 0; i < categories.size(); ++i) {
+            TableRow rowView = (TableRow) inflater.inflate(R.layout.category_row_item, category_list_table, false);
+            //customise the title and image
+            TextView cat_title = rowView.findViewById(R.id.cat_title);
+            cat_title.setText(categories.get(i).getName());
+            ImageView cat_img = rowView.findViewById(R.id.cat_img);
+            cat_img.setImageResource(imageId[categories.get(i).getImageNo() - 1]);
+            ImageView cat_del = rowView.findViewById(R.id.cat_del);
+            cat_del.setOnClickListener(this::deleteCategory);
+            rowView.setId(i);
+            rowView.setOnClickListener(this::viewItems);
+            //add to table
+            category_list_table.addView(rowView);
+        }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,21 +83,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-//        category_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Category clicked_category = (Category) parent.getItemAtPosition(position);
-//                Intent intent = new Intent(MainActivity.this, ItemActivity.class);
-//                intent.putExtra("id", String.valueOf(clicked_category.getId()));
-//                intent.putExtra("name", String.valueOf(clicked_category.getName()));
-//                intent.putExtra("days", String.valueOf(clicked_category.getDays()));
-//                Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
-//                startActivity(intent);
-//            }
-//        });
     }
+
+    private void deleteCategory(View view) {
+        Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
+    }
+
+    private void viewItems(View view) {
+        Category clicked_category = categories.get(view.getId());
+        Toast.makeText(this, "You clicked on item: " + clicked_category.toString() + ", at position: " + view.getId(), Toast.LENGTH_SHORT).show();
+        Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
+        Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+        intent.putExtra("id", String.valueOf(clicked_category.getId()));
+        intent.putExtra("name", String.valueOf(clicked_category.getName()));
+        intent.putExtra("days", String.valueOf(clicked_category.getDays()));
+        startActivity(intent);
+    }
+
     private void createNotificationChannel() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "ExpiryDateTracker";
