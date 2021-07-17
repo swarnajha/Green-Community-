@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +66,6 @@ public class AddItemActivity extends AppCompatActivity {
         icon = findViewById(R.id.toolbar_icon);
         add_btn = findViewById(R.id.add_item);
         add_date_box = findViewById(R.id.add_date_box);
-        expiry_date = findViewById(R.id.expiry_date);
         item_name = findViewById(R.id.item_name);
         container = findViewById(R.id.date_box_layout);
 
@@ -115,7 +116,6 @@ public class AddItemActivity extends AppCompatActivity {
                     if (databaseHelper.addItem(items[i])) {
                         result++;
                         setAlarm(items[i]);
-                        //scheduleNotification(getNotification( "5 second delay" ) , 5000 ) ;
                     } else
                         result = noOfDateBoxes * -1;
                 }
@@ -158,54 +158,20 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public void removeDateBox(View view) {
-        //LinearLayout ll = (LinearLayout)view.getParent();
         noOfDateBoxes--;
         container.removeView((View) view.getParent());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void addDateBox(View view) {
         //add another date box to the layout, below current one
         noOfDateBoxes++;
 
-        final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final LinearLayout.LayoutParams et_params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final LinearLayout.LayoutParams img_params = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.bottomMargin = 10;
-        et_params.weight = 0.9f;
-        img_params.weight = 0.1f;
-        img_params.gravity = Gravity.CENTER_VERTICAL;
-
-        LinearLayout ll = new LinearLayout(getApplicationContext());
-        ll.setLayoutParams(params);
-        ll.setPadding(5, 5, 5, 5);
-        ll.setOrientation(LinearLayout.HORIZONTAL);
-        ll.setBackgroundResource(R.drawable.text_box);
-
-        EditText et = new EditText(getApplicationContext());
-        et.setLayoutParams(et_params);
-        //et.setPadding(5,5,5,5);
-        et.setHint(R.string.date_hint);
-        et.setHintTextColor(getResources().getColor(R.color.grey));
-        et.setTextColor(getResources().getColor(R.color.white));
-        et.setText(expiry_date.getText());
-        et.setTextSize(20);
-        Typeface typeface = getResources().getFont(R.font.lato);
-        et.setTypeface(typeface);
-        et.setFocusable(false);
-        //et.setBackgroundColor(getResources().getColor(R.color.black));
-        et.setOnClickListener(this::setDate);
-
-        ImageView img = new ImageView(getApplicationContext());
-        img.setLayoutParams(img_params);
-        img.setPadding(5, 0, 5, 0);
-        img.setImageResource(R.drawable.ic_remove_blue);
-        img.setOnClickListener(this::removeDateBox);
-
-        ll.addView(et);
-        ll.addView(img);
-
-        container.addView(ll);
+        LayoutInflater inflater = this.getLayoutInflater();
+        LinearLayout date_box = (LinearLayout) inflater.inflate(R.layout.date_box, container, false);
+        ImageView btn = date_box.findViewById(R.id.add_date_box);
+        btn.setOnClickListener(this::removeDateBox);
+        btn.setImageResource(R.drawable.ic_remove_blue);
+        container.addView(date_box);
     }
 
     private void setAlarm(Item item) {
