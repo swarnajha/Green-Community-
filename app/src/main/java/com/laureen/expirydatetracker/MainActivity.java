@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "MainActivity";
     List<Category> categories;
     TextView title;
     ImageView icon;
@@ -86,7 +87,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteCategory(View view) {
-        Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
+        TableRow rowView = (TableRow)view.getParent();
+        int id = rowView.getId();
+        int result = databaseHelper.removeCategory(categories.get(id));
+        if(result == 1) {
+            Toast.makeText(this, "Category successfully deleted!", Toast.LENGTH_SHORT).show();
+            categories.remove(id);
+            category_list_table.removeView(rowView);
+            //TODO: Delete alarms of all items in that category
+        } else {
+            Toast.makeText(this, "An error occurred.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void viewItems(View view) {

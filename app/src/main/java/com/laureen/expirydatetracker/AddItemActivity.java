@@ -115,7 +115,7 @@ public class AddItemActivity extends AppCompatActivity {
                 for (int i = 0; i < noOfDateBoxes; ++i) {
                     if (databaseHelper.addItem(items[i])) {
                         result++;
-                        setAlarm(items[i]);
+                        //setAlarm(items[i]);
                     } else
                         result = noOfDateBoxes * -1;
                 }

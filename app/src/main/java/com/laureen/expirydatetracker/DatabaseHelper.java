@@ -66,12 +66,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Boolean removeCategory(Category category) {
+    public int removeCategory(Category category) {
         //to delete a category in the db
         SQLiteDatabase db = this.getWritableDatabase();
-        String deleteString = "DELETE FROM " + CAT_TABLE_NAME + " WHERE " + COLUMN_1 + " = " + category.getId();
-        Cursor cursor = db.rawQuery(deleteString, null);
-        return cursor.moveToFirst();
+        return db.delete(CAT_TABLE_NAME, COLUMN_1 + "=" + category.getId(), null);
     }
 
     public List<Category> getAllCategories() {
