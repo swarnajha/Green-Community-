@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     private void viewItems(View view) {
         Category clicked_category = categories.get(view.getId());
         Toast.makeText(this, "You clicked on item: " + clicked_category.toString() + ", at position: " + view.getId(), Toast.LENGTH_SHORT).show();
-        Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
+        //Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
         Intent intent = new Intent(MainActivity.this, ItemActivity.class);
         intent.putExtra("id", String.valueOf(clicked_category.getId()));
         intent.putExtra("name", String.valueOf(clicked_category.getName()));

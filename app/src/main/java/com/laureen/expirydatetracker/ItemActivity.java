@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,13 +80,13 @@ public class ItemActivity extends AppCompatActivity {
             }
         });
 
-        //Populate the table by adding rows dynamically
+        //Populate the list by adding rows dynamically
         LayoutInflater inflater = this.getLayoutInflater();
         items = databaseHelper.getAllItems(category_id);
 
         for(int i = 0; i < items.size(); ++i) {
             RelativeLayout rowView = (RelativeLayout) inflater.inflate(R.layout.items_row_item, item_list, false);
-            //customise the title and image
+            //customise the title and date
             TextView item_title = rowView.findViewById(R.id.item_title);
             item_title.setText(items.get(i).getName());
             TextView item_date = rowView.findViewById(R.id.item_date);
@@ -94,18 +95,9 @@ public class ItemActivity extends AppCompatActivity {
             item_del.setOnClickListener(this::deleteItem);
             rowView.setId(i);
             rowView.setOnClickListener(this::onClickItem);
-            //add to table
+            //add to list
             item_list.addView(rowView);
         }
-
-//        item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                //Log.d("Category List", "onItemClick: item clicked - "+ l);
-//                Item clicked_item = (Item) parent.getItemAtPosition(position);
-//                Toast.makeText(ItemActivity.this, "Item clicked: " + clicked_item.toString(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     private void onClickItem(View view) {
@@ -114,7 +106,16 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     private void deleteItem(View view) {
-        Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
-
+        RelativeLayout rowView = (RelativeLayout) view.getParent();
+        int id = rowView.getId();
+        int result = databaseHelper.removeItem(items.get(id));
+        if(result == 1) {
+            Toast.makeText(this, "Item successfully deleted!", Toast.LENGTH_SHORT).show();
+            items.remove(id);
+            item_list.removeView(rowView);
+            //TODO: Delete alarm of the item
+        } else {
+            Toast.makeText(this, "An error occurred.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

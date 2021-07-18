@@ -96,14 +96,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
-    public String[] getAllCategoryTitles(List<Category> categories) {
-        String[] category_titles = new String[categories.size()];
-        for(int i = 0; i < categories.size(); ++i) {
-            category_titles[i] = categories.get(i).getName();
-        }
-        return category_titles;
-    }
-
     public Boolean addItem(Item item) {
         //to add_btn an item to the db
         SQLiteDatabase db = this.getWritableDatabase();
@@ -117,12 +109,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Boolean removeItem(Item item) {
+    public int removeItem(Item item) {
         //to delete an item from the db
         SQLiteDatabase db = this.getWritableDatabase();
-        String deleteString = "DELETE FROM " + ITEM_TABLE_NAME + " WHERE " + COLUMN_1 + " = " + item.getId();
-        Cursor cursor = db.rawQuery(deleteString, null);
-        return cursor.moveToFirst();
+        return db.delete(ITEM_TABLE_NAME, COLUMN_1 + "=" + item.getId(), null);
     }
 
     public List<Item> getAllItems(int categoryID) {

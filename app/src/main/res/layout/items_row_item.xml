@@ -10,7 +10,6 @@
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bread"
             android:textSize="20sp"
             android:textColor="@color/white"
             android:fontFamily="@font/lato"
@@ -21,7 +20,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/item_title"
             android:layout_marginTop="5dp"
-            android:text="Expires on 15/2/2021"
             android:textSize="15sp"
             android:textColor="@color/white"
             android:fontFamily="@font/lato"
@@ -32,6 +30,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/delete_icon"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent" />
 </RelativeLayout>
