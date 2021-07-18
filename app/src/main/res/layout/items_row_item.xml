@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-        android:padding="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/purple">
-        <ImageView
-            android:id="@+id/cat_img"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/blue_image_1"
-            android:background="@android:color/transparent" />
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@color/purple">
         <TextView
-            android:id="@+id/cat_title"
+            android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.85"
-            android:layout_marginLeft="10dp"
-            android:text="Food"
+            android:text="Bread"
             android:textSize="20sp"
             android:textColor="@color/white"
+            android:fontFamily="@font/lato"
+            android:background="@android:color/transparent" />
+        <TextView
+            android:id="@+id/item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_title"
+            android:layout_marginTop="5dp"
+            android:text="Expires on 15/2/2021"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/lato"
             android:background="@android:color/transparent"/>
         <ImageView
-            android:id="@+id/cat_del"
+            android:id="@+id/item_del"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
             android:src="@drawable/delete_icon"
             android:background="@android:color/transparent"/>
-    </TableRow>
-
-</TableLayout>
+</RelativeLayout>

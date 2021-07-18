@@ -5,23 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 public class ItemActivity extends AppCompatActivity {
     TextView title;
-    ListView item_list;
+    LinearLayout item_list;
     ImageView icon;
     FloatingActionButton fab;
     DatabaseHelper databaseHelper;
-    ArrayAdapter<Item> itemArrayAdapter;
+    List<Item> items;
+    //ArrayAdapter<Item> itemArrayAdapter;
 
     String category_name;
     int category_id, category_days;
@@ -43,8 +46,8 @@ public class ItemActivity extends AppCompatActivity {
         item_list = findViewById(R.id.item_list);
 
         databaseHelper = new DatabaseHelper(ItemActivity.this);
-        itemArrayAdapter = new ArrayAdapter<Item>(ItemActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllItems(category_id));
-        item_list.setAdapter(itemArrayAdapter);
+//        itemArrayAdapter = new ArrayAdapter<Item>(ItemActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllItems(category_id));
+//        item_list.setAdapter(itemArrayAdapter);
 
         //Change the page title
         title = findViewById(R.id.page_title);
@@ -76,13 +79,42 @@ public class ItemActivity extends AppCompatActivity {
             }
         });
 
-        item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Log.d("Category List", "onItemClick: item clicked - "+ l);
-                Item clicked_item = (Item) parent.getItemAtPosition(position);
-                Toast.makeText(ItemActivity.this, "Item clicked: " + clicked_item.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        //Populate the table by adding rows dynamically
+        LayoutInflater inflater = this.getLayoutInflater();
+        items = databaseHelper.getAllItems(category_id);
+
+        for(int i = 0; i < items.size(); ++i) {
+            RelativeLayout rowView = (RelativeLayout) inflater.inflate(R.layout.items_row_item, item_list, false);
+            //customise the title and image
+            TextView item_title = rowView.findViewById(R.id.item_title);
+            item_title.setText(items.get(i).getName());
+            TextView item_date = rowView.findViewById(R.id.item_date);
+            item_date.setText("Expires on " + items.get(i).getDate() + "!");
+            ImageView item_del = rowView.findViewById(R.id.item_del);
+            item_del.setOnClickListener(this::deleteItem);
+            rowView.setId(i);
+            rowView.setOnClickListener(this::onClickItem);
+            //add to table
+            item_list.addView(rowView);
+        }
+
+//        item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                //Log.d("Category List", "onItemClick: item clicked - "+ l);
+//                Item clicked_item = (Item) parent.getItemAtPosition(position);
+//                Toast.makeText(ItemActivity.this, "Item clicked: " + clicked_item.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
+    private void onClickItem(View view) {
+        Item clicked_item = items.get(view.getId());
+        Toast.makeText(this, "You clicked on item: " + clicked_item.toString() + ", at position: " + view.getId(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void deleteItem(View view) {
+        Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
+
     }
 }

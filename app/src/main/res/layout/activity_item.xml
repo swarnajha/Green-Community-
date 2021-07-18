@@ -11,17 +11,29 @@
         android:layout_below="@id/toolbar"
         android:id="@+id/divider"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/divider"
-        android:layout_centerHorizontal="true"
-        android:divider = "#000"
-        android:dividerHeight = "1dp"
-        android:footerDividersEnabled = "false"
-        android:headerDividersEnabled = "false"
-        android:padding="10dp"
-        android:id="@+id/item_list" />
+<!--    <ListView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_below="@id/divider"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:divider = "#000"-->
+<!--        android:dividerHeight = "1dp"-->
+<!--        android:footerDividersEnabled = "false"-->
+<!--        android:headerDividersEnabled = "false"-->
+<!--        android:padding="10dp"-->
+<!--        android:id="@+id/item_list" />-->
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/divider">
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/item_list"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_item"
