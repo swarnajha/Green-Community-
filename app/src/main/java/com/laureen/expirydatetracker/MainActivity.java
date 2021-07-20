@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteCategory(View view) {
-        //Toast.makeText(this, "You clicked on delete", Toast.LENGTH_SHORT).show();
         TableRow rowView = (TableRow)view.getParent();
         int id = rowView.getId();
         int result = databaseHelper.removeCategory(categories.get(id));

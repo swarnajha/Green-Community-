@@ -2,6 +2,9 @@ package com.laureen.expirydatetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,22 +13,29 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class ItemActivity extends AppCompatActivity {
+    private static final String TAG = "ItemActivity";
+    public static final int ID_INDEX = 2;
     TextView title;
     LinearLayout item_list;
     ImageView icon;
     FloatingActionButton fab;
     DatabaseHelper databaseHelper;
     List<Item> items;
-    //ArrayAdapter<Item> itemArrayAdapter;
+    AlarmManager alarmManager;
 
     String category_name;
     int category_id, category_days;
@@ -47,14 +57,10 @@ public class ItemActivity extends AppCompatActivity {
         item_list = findViewById(R.id.item_list);
 
         databaseHelper = new DatabaseHelper(ItemActivity.this);
-//        itemArrayAdapter = new ArrayAdapter<Item>(ItemActivity.this, android.R.layout.simple_list_item_1, databaseHelper.getAllItems(category_id));
-//        item_list.setAdapter(itemArrayAdapter);
 
         //Change the page title
         title = findViewById(R.id.page_title);
         title.setText(getResources().getString(R.string.item_list_title) + " " + category_name);
-        //returns a number if you use without the whole thing
-        //Log.d("Item List", "onCreate: title - " + getResources().getString(R.string.item_list_title) + ", " + category_name);
 
         //Change the top left icon to a back button
         icon = findViewById(R.id.toolbar_icon);
@@ -84,13 +90,20 @@ public class ItemActivity extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         items = databaseHelper.getAllItems(category_id);
 
+        Collections.sort(items, new DateComparator());  //sort in ascending order of dates
+
         for(int i = 0; i < items.size(); ++i) {
             RelativeLayout rowView = (RelativeLayout) inflater.inflate(R.layout.items_row_item, item_list, false);
             //customise the title and date
+            Item item = items.get(i);
             TextView item_title = rowView.findViewById(R.id.item_title);
-            item_title.setText(items.get(i).getName());
+            item_title.setText(item.getName());
             TextView item_date = rowView.findViewById(R.id.item_date);
-            item_date.setText("Expires on " + items.get(i).getDate() + "!");
+            if(item.isExpired() || checkIfExpired(item)) {
+                item_date.setText("Expired!");
+            } else {
+                item_date.setText("Expires on " + item.getDate() + "!");
+            }
             ImageView item_del = rowView.findViewById(R.id.item_del);
             item_del.setOnClickListener(this::deleteItem);
             rowView.setId(i);
@@ -100,9 +113,28 @@ public class ItemActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkIfExpired(Item item) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String cur_date = format.format(new Date());
+        Date date1 = null, date2 = null;
+        try {
+            date1 = format.parse(item.getDate());
+            date2 = format.parse(cur_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assert date1 != null;
+        Log.d(TAG, "checkIfExpired: exp date - " + date1 + ", cur date - " + date2);
+        if(date1.before(date2)) {
+            item.setExpiry(true);
+        }
+        return item.isExpired();
+    }
+
     private void onClickItem(View view) {
-        Item clicked_item = items.get(view.getId());
-        Toast.makeText(this, "You clicked on item: " + clicked_item.toString() + ", at position: " + view.getId(), Toast.LENGTH_SHORT).show();
+        int id = view.getId();
+        Item clicked_item = items.get(id);
+        Toast.makeText(this, "You clicked on item: " + clicked_item.toString() + ", at position: " + id, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteItem(View view) {
@@ -111,9 +143,17 @@ public class ItemActivity extends AppCompatActivity {
         int result = databaseHelper.removeItem(items.get(id));
         if(result == 1) {
             Toast.makeText(this, "Item successfully deleted!", Toast.LENGTH_SHORT).show();
-            items.remove(id);
             item_list.removeView(rowView);
-            //TODO: Delete alarm of the item
+
+            //Delete alarm of the item
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+            int requestCode = items.get(id).getId();
+            Log.d(TAG, "deleteItem: requestCode = " + requestCode);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.cancel(pendingIntent);
+
+            items.remove(id);
         } else {
             Toast.makeText(this, "An error occurred.", Toast.LENGTH_SHORT).show();
         }

@@ -96,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return returnList;
     }
 
-    public Boolean addItem(Item item) {
+    public int addItem(Item item) {
         //to add_btn an item to the db
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -104,9 +104,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(ITEM_COLUMN_3, item.getDate());
         cv.put(ITEM_COLUMN_4, item.getCategoryID());
 
-        long result = db.insert(ITEM_TABLE_NAME, null, cv);
+        int result = (int) db.insert(ITEM_TABLE_NAME, null, cv);
         db.close();
-        return result != -1;
+        return result;
     }
 
     public int removeItem(Item item) {

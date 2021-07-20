@@ -1,9 +1,12 @@
 package com.laureen.expirydatetracker;
 
+import java.util.Comparator;
+
 public class Item {
     private int id;
     private String name;
     private String date;
+    private boolean expired;
     private int categoryID;
 
     public Item(int id, String name, String date, int categoryID) {
@@ -11,6 +14,7 @@ public class Item {
         this.name = name;
         this.date = date;
         this.categoryID = categoryID;
+        this.expired = false;
     }
 
     @Override
@@ -47,6 +51,14 @@ public class Item {
         this.date = date;
     }
 
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpiry(boolean expired) {
+        this.expired = expired;
+    }
+
     public int getCategoryID() {
         return categoryID;
     }
@@ -55,3 +67,4 @@ public class Item {
         this.categoryID = categoryID;
     }
 }
+

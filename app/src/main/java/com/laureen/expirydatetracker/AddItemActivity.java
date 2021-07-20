@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddItemActivity extends AppCompatActivity {
     public static final int YEAR_MIN = 2000;
@@ -101,8 +102,8 @@ public class AddItemActivity extends AppCompatActivity {
                     //get the dates
                     LinearLayout ll = (LinearLayout) container.getChildAt(i);
                     EditText et_view = (EditText) ll.getChildAt(0);
-                    items[i] = new Item(-1, item_name.getText().toString(), null, category_id);
-                    items[i].setDate(et_view.getText().toString());
+                    items[i] = new Item(-1, item_name.getText().toString(), et_view.getText().toString(), category_id);
+                    //items[i].setDate();
                     if (items[i].getDate().equals("")) {
                         Toast.makeText(AddItemActivity.this, "Please fill in the dates!", Toast.LENGTH_SHORT).show();
                         return;
@@ -113,9 +114,11 @@ public class AddItemActivity extends AppCompatActivity {
                 //add item(s) to db
                 int result = 0;
                 for (int i = 0; i < noOfDateBoxes; ++i) {
-                    if (databaseHelper.addItem(items[i])) {
+                    int id = databaseHelper.addItem(items[i]);
+                    if (id != -1) {
                         result++;
-                        //setAlarm(items[i]);
+                        items[i].setId(id);
+                        setAlarm(items[i]);
                     } else
                         result = noOfDateBoxes * -1;
                 }
@@ -179,6 +182,7 @@ public class AddItemActivity extends AppCompatActivity {
 
         //Format: DD/MM/YYYY or D/MM/YYYY or DD/M/YYYY or D/M/YYYY
         String date = item.getDate();
+        Log.d(TAG, "setAlarm: Date is " + date);
         int endIndex = (date.charAt(1) == '/') ? 1 : 2;
         int set_day = Integer.parseInt(date.substring(0, endIndex));
         int endIndex2 = (date.charAt(endIndex + 2) == '/') ? endIndex + 2 : endIndex + 3;
@@ -192,18 +196,28 @@ public class AddItemActivity extends AppCompatActivity {
         c.set(Calendar.YEAR, set_year);
         c.set(Calendar.MONTH, set_month - 1);
         c.set(Calendar.DAY_OF_MONTH, set_day);
+
+        Calendar cur = Calendar.getInstance();
+        if(cur.after(c)) {
+            //if current date is after expiry date
+            //i.e., item has already expired
+            item.setExpiry(true);
+        }
+
         Log.d(TAG, "setAlarm:  after initial setup" + c.getTime());
         //subtract notify days
         c.add(Calendar.DAY_OF_MONTH, -category_days);
         Log.d(TAG, "setAlarm: after adding days" + c.getTime());
         //set alarm at 8.00 AM
-        c.set(Calendar.HOUR_OF_DAY, 8);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
+//        c.set(Calendar.HOUR_OF_DAY, 12);
+//        c.set(Calendar.MINUTE, 40);
+//        c.set(Calendar.SECOND, 0);
+        c.add(Calendar.SECOND, 30);
         Log.d(TAG, "setAlarm: after setting time" + c.getTime());
         Log.d(TAG, "setAlarm: " + c.toString());
 
-        Calendar cur = Calendar.getInstance();
+
+        Log.d(TAG, "setAlarm: " + cur.getTime());
         if (cur.before(c)) {
             //set alarm only if notify date is after current date
             Log.d(TAG, "setAlarm: hello");
@@ -211,11 +225,13 @@ public class AddItemActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
             intent.putExtra("name", item.getName());
             intent.putExtra("days", category_days + "");
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            int requestCode = item.getId();
+            Log.d(TAG, "setAlarm: requestCode = " + requestCode);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         } else {
-            //otherwise, no alarm to set
-            //TODO: make item.expired true
+            //otherwise, no alarm to set as item is expired
+            //item.setExpiry(true);
         }
     }
 }
