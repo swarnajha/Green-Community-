@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
     //array to hold image for display
     Integer[] imageId = {
-            R.drawable.pink_image_1,
-            R.drawable.pink_image_2,
-            R.drawable.pink_image_3,
-            R.drawable.blue_image_1,
-            R.drawable.blue_image_2,
-            R.drawable.blue_image_3
+            R.drawable.pink_img,
+            R.drawable.blue_img,
+            R.drawable.yellow_img,
+            R.drawable.red_img,
+            R.drawable.white_img,
+            R.drawable.green_img
     };
 
     @Override

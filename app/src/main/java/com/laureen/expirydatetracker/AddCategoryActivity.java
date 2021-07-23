@@ -122,12 +122,12 @@ public class AddCategoryActivity extends AppCompatActivity {
     }
     public void setImage(int counter) {
         switch(counter) {
-            case 1: img.setImageResource(R.drawable.pink_image_1); break;
-            case 2: img.setImageResource(R.drawable.pink_image_2); break;
-            case 3: img.setImageResource(R.drawable.pink_image_3); break;
-            case 4: img.setImageResource(R.drawable.blue_image_1); break;
-            case 5: img.setImageResource(R.drawable.blue_image_2); break;
-            case 6: img.setImageResource(R.drawable.blue_image_3); break;
+            case 1: img.setImageResource(R.drawable.pink_img); break;
+            case 2: img.setImageResource(R.drawable.blue_img); break;
+            case 3: img.setImageResource(R.drawable.yellow_img); break;
+            case 4: img.setImageResource(R.drawable.red_img); break;
+            case 5: img.setImageResource(R.drawable.white_img); break;
+            case 6: img.setImageResource(R.drawable.green_img); break;
             default:
                 Log.d(TAG, "setImage: invalid counter - " + counter);
         }

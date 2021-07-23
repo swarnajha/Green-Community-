@@ -42,7 +42,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/pink_image_1"
+                android:src="@drawable/pink_img"
                 android:contentDescription="@string/img"
                 android:id="@+id/img"/>
             <ImageView
