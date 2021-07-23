@@ -1,6 +1,5 @@
 package com.laureen.expirydatetracker;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
@@ -8,26 +7,20 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 public class AddItemActivity extends AppCompatActivity {
     public static final int YEAR_MIN = 2000;
@@ -42,7 +35,7 @@ public class AddItemActivity extends AppCompatActivity {
     TextView title;
     ImageView icon, add_date_box;
     Button add_btn;
-    EditText expiry_date, item_name;
+    EditText item_name;
 
     Bundle bundle;
     DatabaseHelper databaseHelper;

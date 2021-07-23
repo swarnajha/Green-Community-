@@ -24,15 +24,6 @@
             android:textColor="@color/white"
             android:fontFamily="@font/lato"
             android:background="@android:color/transparent"/>
-<!--        <TextView-->
-<!--            android:id="@+id/item_id"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@id/item_title"-->
-<!--            android:layout_toRightOf="@id/item_date"-->
-<!--            android:layout_toEndOf="@id/item_date"-->
-<!--            android:visibility="invisible"-->
-<!--            android:background="@android:color/transparent"/>-->
         <ImageView
             android:id="@+id/item_del"
             android:layout_width="25dp"

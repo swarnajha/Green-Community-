@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -117,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<Item> getAllItems(int categoryID) {
         //to return a list of all items in that category
-        List<Item> returnList = new ArrayList<Item>();
+        List<Item> returnList = new ArrayList<>();
         String queryString = "SELECT * FROM " + ITEM_TABLE_NAME + " WHERE " + ITEM_COLUMN_4 + " = " + categoryID;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);

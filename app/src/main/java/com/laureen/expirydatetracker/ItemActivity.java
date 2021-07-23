@@ -20,15 +20,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 public class ItemActivity extends AppCompatActivity {
     private static final String TAG = "ItemActivity";
-    public static final int ID_INDEX = 2;
     TextView title;
     LinearLayout item_list;
     ImageView icon;
@@ -150,7 +147,7 @@ public class ItemActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
             int requestCode = items.get(id).getId();
             Log.d(TAG, "deleteItem: requestCode = " + requestCode);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
             alarmManager.cancel(pendingIntent);
 
             items.remove(id);
