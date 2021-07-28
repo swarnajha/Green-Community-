@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 public class AddCategoryActivity extends AppCompatActivity {
     private static final String TAG = "AddCategoryActivity";
-
     public static final int NOTIFY_DAYS_MIN = 1;
     public static final int NOTIFY_DAYS_MAX = 30;
     int imageCounter = 1, imageNum = 6;
@@ -64,7 +63,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                     setImage(imageCounter);
                 else
                     imageCounter = 1;
-
             }
         });
 
@@ -84,7 +82,7 @@ public class AddCategoryActivity extends AppCompatActivity {
         add_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String cat_name = "";
+                String cat_name;
                 int notify_days;
                 try {
                     cat_name = name.getText().toString();
@@ -108,7 +106,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                 boolean result = databaseHelper.addCategory(category);
                 if(result) {
                     //if successful
-                    Toast.makeText(AddCategoryActivity.this, "Category Added!" + category.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddCategoryActivity.this, "Category Added!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AddCategoryActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {
@@ -116,9 +114,6 @@ public class AddCategoryActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
     public void setImage(int counter) {
         switch(counter) {

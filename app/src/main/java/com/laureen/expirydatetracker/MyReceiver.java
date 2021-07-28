@@ -13,10 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class MyReceiver extends BroadcastReceiver {
-    public static final String CHANNEL_ID = "1000";
     public static int NOTIFICATION_ID = 1;
-    //public static String NOTIFICATION = "notification";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);

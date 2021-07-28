@@ -135,4 +135,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
+
+    public int[] getAllItemIds(int categoryID) {
+        //to return a list of all items in that category
+        String queryString = "SELECT * FROM " + ITEM_TABLE_NAME + " WHERE " + ITEM_COLUMN_4 + " = " + categoryID;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        int[] returnList = new int[cursor.getCount()];
+        int i = 0;
+        if(cursor.moveToFirst()) {
+            //loop through the cursor
+            do {
+                returnList[i++] = cursor.getInt(0);
+            } while(cursor.moveToNext());
+        }
+        //close the cursor and db once done
+        cursor.close();
+        db.close();
+        return returnList;
+    }
 }

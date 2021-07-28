@@ -74,6 +74,7 @@
             android:inputType="textPersonName"
             android:textColor="@color/white"
             android:background="@drawable/text_box"
+            android:maxLength="12"
             android:textSize="20sp"
             android:id="@+id/name"/>
 
@@ -104,7 +105,7 @@
                 android:text="@string/default_days"
                 android:textSize="20sp"
                 android:textColor="@color/white"
-                android:maxLength="3"
+                android:maxLength="2"
                 android:maxLines="1"
                 android:fontFamily="@font/lato"
                 android:inputType="numberSigned"
@@ -125,6 +126,7 @@
             android:layout_gravity="center"
             android:text="@string/add_btn"
             android:textSize="18sp"
+            android:textColor="@color/white"
             android:fontFamily="@font/lato"
             android:padding="10dp"
             android:backgroundTint="@color/purple"

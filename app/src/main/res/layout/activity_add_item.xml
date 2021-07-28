@@ -31,6 +31,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:maxLines="1"
+            android:maxLength="30"
             android:fontFamily="@font/lato"
             android:id="@+id/item_name"/>
         <TextView
@@ -60,7 +61,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
             android:text="@string/add_btn"
+            android:textSize="18sp"
+            android:textColor="@color/white"
             android:fontFamily="@font/lato"
+            android:padding="10dp"
             android:backgroundTint="@color/purple"
             android:id="@+id/add_item"/>
     </LinearLayout>

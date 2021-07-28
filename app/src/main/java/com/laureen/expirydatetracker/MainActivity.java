@@ -2,8 +2,11 @@ package com.laureen.expirydatetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        createNotificationChannel();
 
         title = findViewById(R.id.page_title);
         fab = findViewById(R.id.fab_cat);
@@ -89,12 +90,22 @@ public class MainActivity extends AppCompatActivity {
     private void deleteCategory(View view) {
         TableRow rowView = (TableRow)view.getParent();
         int id = rowView.getId();
+        int[] itemIds = databaseHelper.getAllItemIds(categories.get(id).getId());  //get all item ids
         int result = databaseHelper.removeCategory(categories.get(id));
         if(result == 1) {
             Toast.makeText(this, "Category successfully deleted!", Toast.LENGTH_SHORT).show();
             categories.remove(id);
             category_list_table.removeView(rowView);
-            //TODO: Delete alarms of all items in that category
+
+            //delete all item alarms
+            for (Integer itemId : itemIds) {
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+                int requestCode = itemId;
+                Log.d(TAG, "deleteCategory: requestCode = " + requestCode);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
+                alarmManager.cancel(pendingIntent);
+            }
         } else {
             Toast.makeText(this, "An error occurred.", Toast.LENGTH_SHORT).show();
         }
@@ -102,8 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void viewItems(View view) {
         Category clicked_category = categories.get(view.getId());
-        Toast.makeText(this, "You clicked on item: " + clicked_category.toString() + ", at position: " + view.getId(), Toast.LENGTH_SHORT).show();
-        //Log.d("Category List", "onItemClick: item clicked - "+ clicked_category.getId() + clicked_category.getName());
+        Toast.makeText(this, "Notifies " + clicked_category.getDays() + " days before", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, ItemActivity.class);
         intent.putExtra("id", String.valueOf(clicked_category.getId()));
         intent.putExtra("name", String.valueOf(clicked_category.getName()));
@@ -111,16 +121,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "ExpiryDateTracker";
-            String description = "Channel for Alarm Manager";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("tracker", name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 }

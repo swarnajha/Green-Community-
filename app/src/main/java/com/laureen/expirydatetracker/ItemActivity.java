@@ -131,7 +131,7 @@ public class ItemActivity extends AppCompatActivity {
     private void onClickItem(View view) {
         int id = view.getId();
         Item clicked_item = items.get(id);
-        Toast.makeText(this, "You clicked on item: " + clicked_item.toString() + ", at position: " + id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "You clicked on item: " + clicked_item.toString() + ", at position: " + id, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteItem(View view) {

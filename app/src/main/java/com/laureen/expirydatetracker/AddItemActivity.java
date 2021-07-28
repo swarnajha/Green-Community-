@@ -27,7 +27,7 @@ public class AddItemActivity extends AppCompatActivity {
     public static final int YEAR_MAX = 2050;
     private static final String TAG = "AddItemActivity";
 
-    int noOfDateBoxes = 1;
+    int noOfDateBoxes = 1, maxDateBoxes = 8;
     int category_id, category_days;
     String category_name;
 
@@ -160,8 +160,11 @@ public class AddItemActivity extends AppCompatActivity {
 
     public void addDateBox(View view) {
         //add another date box to the layout, below current one
+        if(noOfDateBoxes + 1 > maxDateBoxes) {
+            Toast.makeText(this, "Cannot exceed 8 dates!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         noOfDateBoxes++;
-
         LayoutInflater inflater = this.getLayoutInflater();
         LinearLayout date_box = (LinearLayout) inflater.inflate(R.layout.date_box, container, false);
         ImageView btn = date_box.findViewById(R.id.add_date_box);
@@ -171,8 +174,6 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     private void setAlarm(Item item) {
-        //TODO: Make notifications update, if many present
-
         //Format: DD/MM/YYYY or D/MM/YYYY or DD/M/YYYY or D/M/YYYY
         String date = item.getDate();
         Log.d(TAG, "setAlarm: Date is " + date);
@@ -183,7 +184,7 @@ public class AddItemActivity extends AppCompatActivity {
         int set_year = Integer.parseInt(date.substring(endIndex2 + 1));
 
         Calendar c = Calendar.getInstance();
-        Log.d(TAG, "setAlarm: init" + c.getTime());
+        Log.d(TAG, "setAlarm: init " + c.getTime());
         c.setTimeInMillis(System.currentTimeMillis());
         Log.d(TAG, "setAlarm: " + set_year + "/" + set_month + "/" + set_day);
         c.set(Calendar.YEAR, set_year);
@@ -197,13 +198,13 @@ public class AddItemActivity extends AppCompatActivity {
             item.setExpiry(true);
         }
 
-        Log.d(TAG, "setAlarm:  after initial setup" + c.getTime());
+        Log.d(TAG, "setAlarm:  after initial setup " + c.getTime());
         //subtract notify days
         c.add(Calendar.DAY_OF_MONTH, -category_days);
-        Log.d(TAG, "setAlarm: after adding days" + c.getTime());
+        Log.d(TAG, "setAlarm: after adding days " + c.getTime());
         //set alarm at 8.00 AM
-//        c.set(Calendar.HOUR_OF_DAY, 12);
-//        c.set(Calendar.MINUTE, 40);
+//        c.set(Calendar.HOUR_OF_DAY, 8);
+//        c.set(Calendar.MINUTE, 0);
 //        c.set(Calendar.SECOND, 0);
         c.add(Calendar.SECOND, 30);
         Log.d(TAG, "setAlarm: after setting time" + c.getTime());
@@ -213,7 +214,6 @@ public class AddItemActivity extends AppCompatActivity {
         Log.d(TAG, "setAlarm: " + cur.getTime());
         if (cur.before(c)) {
             //set alarm only if notify date is after current date
-            Log.d(TAG, "setAlarm: hello");
             alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
             intent.putExtra("name", item.getName());
@@ -222,9 +222,6 @@ public class AddItemActivity extends AppCompatActivity {
             Log.d(TAG, "setAlarm: requestCode = " + requestCode);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-        } else {
-            //otherwise, no alarm to set as item is expired
-            //item.setExpiry(true);
         }
     }
 }
