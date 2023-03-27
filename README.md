@@ -1,4 +1,4 @@
-# Forget-Me-Not
+# GREEN COMMUNITY
 An Android application to track expiry dates of items, sorted into categories.
 <figure>
 	<img src="" width=150 height=150>
@@ -19,7 +19,7 @@ An Android application to track expiry dates of items, sorted into categories.
 	
 ## IDE Used
 Project was created in: 
-* Android Studio v4.1 (Java)
+* Android Studio 
 
 ## Screenshots
 <table style="padding: 30px;">
