@@ -1,3 +1,15 @@
+![Current Version](https://img.shields.io/badge/version-v0.1-blue)
+![GitHub contributors](https://img.shields.io/github/contributors/swarnajha/Green-Community-)
+![GitHub stars](https://img.shields.io/github/stars/swarnajha/Green-Community-style=social)
+![GitHub forks](https://img.shields.io/github/forks/swarnajha/Green-Community-?style=social)
+
+
+
+
+
+## Chcek out the .APK File of the Android Application : [Click here](https://drive.google.com/file/d/1Tk2LG3xaNrAxGiXuCV3TxV-QcvQzMHuo/view?usp=sharing)
+
+
 # front_end
 
 A new Flutter project.
@@ -16,7 +28,9 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
-<b>AUTHOR<b>
-1)ADARSHA HALDER
-2)SWARNA JHA
-3)SHREYA CHOUDHURY
+## Authors :
+
+>#### ADARSHA HALDER : [GitHub_Profile](https://github.com/AdarshaHalder)
+>#### SWARNA JHA : [GitHub_Profile](https://github.com/swarnajha)
+>#### SHREYA CHOUDHURY : [GitHub_Profile](https://github.com/shreyac07)
+
